@@ -13,7 +13,7 @@ namespace BookhubApi
         public MappingProfile()
         {
             CreateMap<userVM, User>();
-            //CreateMap<User, userVM>();
+            CreateMap<User, userVM>();
 
             CreateMap<bookVM, Book>();
             //CreateMap<Book, bookVM>();

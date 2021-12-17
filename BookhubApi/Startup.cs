@@ -17,6 +17,7 @@ namespace BookhubApi
 {
     public class Startup
     {
+        readonly string corsConfigurations = "_corsConfigurations";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -43,6 +44,14 @@ namespace BookhubApi
             services.AddSingleton(mapper);
             services.AddScoped<Dbookhub>();
             services.AddMvc();
+            services.AddCors(option => 
+            {
+                option.AddPolicy(name: corsConfigurations,
+                                builder =>
+                                {
+                                    builder.WithOrigins("http://localhost:4200");
+                                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,6 +67,8 @@ namespace BookhubApi
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors(corsConfigurations);
 
             app.UseEndpoints(endpoints =>
             {

@@ -37,17 +37,43 @@ namespace BookhubApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        /*// GET api/<SserController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
-        }*/
+            try
+            {
+                var user = await _context.Users.FindAsync(id);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // GET api/<SserController>/5
+        [HttpGet("{username}, {password}")]
+        public async Task<IActionResult> login(string username, string password)
+        {
+            try
+            {
+                var a = _context.Users.Where(x => x.Correo == username && x.Contra == password).FirstOrDefault();
+                if (a == null)
+                {
+                    return Ok(new { message = "email or password invalid" });
+                }
+                var userId = _context.Users.Where(s => s.Name == username).Select(x => x.UserId);
+                return Ok(userId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         // POST api/<SserController>
         [HttpPost]
-        public async Task<IActionResult> Save(userVM objVM)
+        public async Task<IActionResult> Register(userVM objVM)
         {
             try
             {
@@ -61,6 +87,7 @@ namespace BookhubApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
 
         // PUT api/<SserController>/5
         [HttpPut("{id}")]
